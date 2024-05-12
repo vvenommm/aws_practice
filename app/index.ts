@@ -1,38 +1,21 @@
-import express from "express";
-import * as redis from 'redis';
+import dotenv from "dotenv";
+dotenv.config();
+import * as redis from "redis";
+import { createApp } from "./app";
 
-const PORT = 4000;
-const LIST_KEY = 'message'
+const { PORT, REDIS_URL } = process.env;
 
-export const createApp = async () => { // test를 위해 export 해줘야함
-  const app = express()
-  const client = redis.createClient({url: "redis://localhost:6379"})
-  await client.connect(); // await 사용해야해서 전체 내용을 함수로 감싸주기
+if (!PORT) throw new Error("PORT is required");
+if (!REDIS_URL) throw new Error("REDIS_URL is required");
 
-  app.use(express.json())
+const startServer = async () => {
+  const client = redis.createClient({ url: REDIS_URL });
+  await client.connect();
 
-  app.get("/", (request, response) => {
-    response.status(200).send("hello from express")
-  })
-
-  app.post("/messages", async (request, response) => {
-    const {message} = request.body;
-    await client.lPush(LIST_KEY, message);
-    response.status(200).send("Message added to a list")
-  })
-
-  app.get('/messages', async (request, response) => {
-    const messages = await client.lRange(LIST_KEY, 0, -1);
-    response.status(200).send(messages);
-  })
-
-  return app;
-}
-
-createApp().then((app) => {
+  const app = createApp(client);
   app.listen(PORT, () => {
-    console.log(`App listening at port ${PORT}`)
-  })
-})
+    console.log(`App listening at port ${PORT}`);
+  });
+};
 
-
+startServer();
