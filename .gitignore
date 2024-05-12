@@ -19,5 +19,6 @@ thumb
 sketch
 
 pnpm-lock.yaml
+package-lock.json
 
 # End of https://www.toptal.com/developers/gitignore/api/react
