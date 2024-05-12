@@ -4,7 +4,7 @@ import * as redis from 'redis';
 const PORT = 4000;
 const LIST_KEY = 'message'
 
-const createApp = async () => {
+export const createApp = async () => { // test를 위해 export 해줘야함
   const app = express()
   const client = redis.createClient({url: "redis://localhost:6379"})
   await client.connect(); // await 사용해야해서 전체 내용을 함수로 감싸주기
