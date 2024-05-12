@@ -2,6 +2,7 @@ import express from "express";
 import * as redis from 'redis';
 
 const PORT = 4000;
+const LIST_KEY = 'message'
 
 const createApp = async () => {
   const app = express()
@@ -12,6 +13,17 @@ const createApp = async () => {
 
   app.get("/", (request, response) => {
     response.status(200).send("hello from express")
+  })
+
+  app.post("/messages", async (request, response) => {
+    const {message} = request.body;
+    await client.lPush(LIST_KEY, message);
+    response.status(200).send("Message added to a list")
+  })
+
+  app.get('/messages', async (request, response) => {
+    const messages = await client.lRange(LIST_KEY, 0, -1);
+    response.status(200).send(messages);
   })
 
   return app;
