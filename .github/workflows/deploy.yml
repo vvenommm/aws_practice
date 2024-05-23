@@ -10,18 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up SSH
-        run:
+        run: |
           mkdir -p ~/.ssh/
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chomod 600 ~/.ssh/id_rsa
 
       - name: Set up know hosts
-        run:
+        run: |
           echo "${{ secrets.SSH_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
       - name: SSH and deploy
-        run:
+        run: |
           ssh ${{ secrets.SSH_USERNAME }}@{{ secrets.SSH_PUBLIC_IP }} "
             cd aws_practice
             git pull || exit 1
