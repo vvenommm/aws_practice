@@ -14,9 +14,11 @@ const startServer = async () => {
   await client.connect();
 
   const app = createApp(client);
-  app.listen(PORT, () => {
-    console.log(`App listening at port ${PORT}`);
+  const server = app.listen(PORT, () => {
+    console.log(`App listening at port ${PORT} 123`);
   });
+
+  return server;
 };
 
-startServer();
+const server = startServer();
