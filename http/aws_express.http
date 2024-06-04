@@ -21,3 +21,7 @@ Content-Type: application/json
 
 ### fibonacci function to load a lot
 GET http://localhost:4000/fibonacci/10
+
+
+### GET check a messages array
+GET https://jeonghoo.site/messages
